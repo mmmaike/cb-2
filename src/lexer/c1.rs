@@ -70,32 +70,36 @@ pub enum C1Token {
     RBrace,
 
     //Pseudo Tokens
-    #[regex("[0-9]")]
-    Digit,
-    #[regex("C1Token::Digit+")]
-    Integer,
-    #[regex("C1Token::Integer.C1Token::Integer")]
-    #[regex(".C1Token::Integer")]
-    Float,
-    #[regex("[a-zA-Z]")]
-    Letter,
+    // #[regex("[0-9]+")]
+    // Integer,
+    // #[regex("[0-9]*\\.[0-9]+")]
+    // Float,
+    // #[regex("[a-zA-Z]")]
+    // Letter,
 
     //Term variables
-    #[regex("C1Token::Integer")]
+    #[regex("[0-9]+")]
     ConstInt,
-    #[regex("C1Token::Float([eE]([-+])?C1Token::Integer)")]
-    #[regex("C1Token::Integer[eE]([-+])? C1Token::Integer")]
+    #[regex("[0-9]*(e|E)[0-9]+")]
+    #[regex("[0-9]*\\.[0-9]+")]
     ConstFloat,
     #[regex("true")]
     #[regex("false")]
     ConstBoolean,
-    #[regex(" \" [^\n\"]* \"")]
+    //#[regex("[^\"]*(\\.[^\"|\n]*)*")]
+    #[regex("\"([^\"|\n]*)*\"")]
     ConstString,
-    #[regex("C1Token::Letter+ (C1Token::Digit | C1Token::Letter)*")]
+    #[regex("[a-zA-Z]+([0-9]|[a-zA-Z])*")]
     Id,
 
+    //Whitespace
+    #[regex(r"[ \t\n\f]+", logos::skip)]
+    Whitespace,
+
     //Comments
-    #[regex("/* [^/] */")]
+    #[regex("(/\\*)[^\\*/]*(\\*/)", logos::skip)]
+    #[regex("//.*\n", logos::skip)]
+    Comments,
     // Logos requires one token variant to handle errors,
     // it can be named anything you wish.
     #[error]
