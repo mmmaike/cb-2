@@ -69,24 +69,15 @@ pub enum C1Token {
     #[token("}")]
     RBrace,
 
-    //Pseudo Tokens
-    // #[regex("[0-9]+")]
-    // Integer,
-    // #[regex("[0-9]*\\.[0-9]+")]
-    // Float,
-    // #[regex("[a-zA-Z]")]
-    // Letter,
-
     //Term variables
     #[regex("[0-9]+")]
     ConstInt,
-    #[regex("[0-9]*(e|E)[0-9]+")]
+    #[regex("[0-9]*(e|E)[\\+-]?[0-9]+")]
     #[regex("[0-9]*\\.[0-9]+")]
     ConstFloat,
     #[regex("true")]
     #[regex("false")]
     ConstBoolean,
-    //#[regex("[^\"]*(\\.[^\"|\n]*)*")]
     #[regex("\"([^\"|\n]*)*\"")]
     ConstString,
     #[regex("[a-zA-Z]+([0-9]|[a-zA-Z])*")]

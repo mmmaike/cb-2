@@ -1,4 +1,4 @@
-use logos::{Lexer, Logos, Source};
+use logos::{Lexer, Logos};
 use std::fmt::{Display, Formatter};
 
 /// Tuple struct for link URLs
@@ -26,10 +26,13 @@ impl Display for LinkText {
 /// Token enum for capturing of link URLs and Texts
 #[derive(Logos, Debug, PartialEq)]
 pub enum URLToken {
-    // TODO: Capture link definitions
+    #[regex("<a.*href=\"https?://www.*\".*</a", extract_link_info)]
     Link((LinkUrl, LinkText)),
 
-    // TODO: Ignore all characters that do not belong to a link definition
+    #[regex(
+        "([^A-Z][^a-z][^0-9][^-\\._~:/\\?\\#@!$&'\\(\\)\\*\\+,;=<>])",
+        logos::skip
+    )]
     Ignored,
 
     // Catch any error
@@ -39,6 +42,9 @@ pub enum URLToken {
 
 /// Extracts the URL and text from a string that matched a Link token
 fn extract_link_info(lex: &mut Lexer<URLToken>) -> (LinkUrl, LinkText) {
-    // TODO: Implement extraction from link definition
-    todo!()
+    let _lexslice = lex.slice();
+
+    let linkurl = LinkUrl(String::from("dummy.de"));
+    let linktext = LinkText(String::from("dummylinktext"));
+    ((linkurl), (linktext))
 }
